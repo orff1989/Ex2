@@ -1,10 +1,31 @@
 package api;
 
+import java.util.LinkedList;
+import java.util.Vector;
+
 public class Node implements NodeData {
     private int key, tag;
     private GeoLocation location;
     private double weight;
     private String info;
+    private LinkedList<EdgeData> nodeEdges;
+
+    public Node(GeoLocation location, int key){
+        this.location=location;
+        this.key=key;
+    }
+
+    public EdgeData getEdges(int i) {
+        return nodeEdges.get(i);
+    }
+
+    public void addEdge(EdgeData ed) {
+        nodeEdges.addFirst(ed);
+    }
+
+    public int degree(){ return nodeEdges.size(); }
+
+    public void removeEdge(EdgeData ed){ nodeEdges.remove(ed); }
 
     @Override
     public int getKey() {
@@ -33,7 +54,7 @@ public class Node implements NodeData {
 
     @Override
     public String getInfo() {
-        return info;
+        return this.info;
     }
 
     @Override
@@ -43,7 +64,7 @@ public class Node implements NodeData {
 
     @Override
     public int getTag() {
-        return tag;
+        return this.tag;
     }
 
     @Override

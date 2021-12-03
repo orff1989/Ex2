@@ -1,14 +1,30 @@
 package api;
 
+import java.util.LinkedList;
+import java.util.Vector;
+
 public class Edge implements EdgeData {
     int src, dest, tag;
     double weight;
     String info;
 
-    @Override
-    public int getSrc() {
-        return this.src;
+
+    public Edge(int src, int dest, int tag, double weight, String info) {
+        this.src = src;
+        this.dest = dest;
+        this.tag = tag;
+        this.weight = weight;
+        this.info = info;
     }
+    public Edge(int src, double weight, int dest) {
+        this.src = src;
+        this.dest = dest;
+        this.weight = weight;
+
+    }
+
+    @Override
+    public int getSrc() {return this.src;}
 
     @Override
     public int getDest() {
