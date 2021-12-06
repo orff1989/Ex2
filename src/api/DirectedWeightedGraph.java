@@ -10,6 +10,8 @@ import java.util.Iterator;
  */
 
 public interface DirectedWeightedGraph {
+
+
 	/**
 	 * returns the node_data by the node_id,
 	 * @param key - the node_id

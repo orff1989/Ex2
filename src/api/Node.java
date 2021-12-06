@@ -1,18 +1,38 @@
 package api;
 
 import java.util.LinkedList;
-import java.util.Vector;
 
 public class Node implements NodeData {
-    private int key, tag;
-    private GeoLocation location;
-    private double weight;
-    private String info;
-    private LinkedList<EdgeData> nodeEdges;
 
-    public Node(GeoLocation location, int key){
-        this.location=location;
-        this.key=key;
+
+    private String pos;
+    private transient GeoLocation location;
+    private int id;
+    private transient int tag;
+    private transient double weight;
+    private transient String info;
+    private transient LinkedList<EdgeData> nodeEdges = new LinkedList<>();
+
+    public Node(String pos, int id){
+        this.pos =new String(pos) ;
+        this.id = id;
+
+        String[] loc= pos.split(",");
+        double xx =  Double.parseDouble(loc[0]);
+        double yy =  Double.parseDouble(loc[1]);
+        double zz =  Double.parseDouble(loc[2]);
+
+        this.location= new Location(xx,yy,zz);
+
+    }
+
+    @Override
+    public String toString() {
+        return "pos=" + pos + ", id=" + id;
+    }
+
+    public String getPos() {
+        return pos;
     }
 
     public EdgeData getEdges(int i) {
@@ -29,7 +49,7 @@ public class Node implements NodeData {
 
     @Override
     public int getKey() {
-        return this.key;
+        return this.id;
     }
 
     @Override

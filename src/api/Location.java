@@ -8,6 +8,12 @@ public Location(double x, double y, double z){
     this.y=y;
     this.z=z;
 }
+
+    @Override
+    public String toString() {
+        return x+","+y+","+z;
+    }
+
     @Override
     public double x() {
         return this.x;

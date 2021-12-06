@@ -3,24 +3,53 @@ package api;
 import java.util.*;
 
 public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
-    HashMap<Integer, NodeData> Nodes;
-    HashMap<Vector, EdgeData> Edges;
-    Iterator itOfNodes;
-    int itOfNodesCreated;
-    Iterator itOfEdges;
-    int itOfEdgesCreated;
-    int changes;
 
-    public MyDirectedWeightedGraph(HashMap nodes, HashMap edges){
-        this.Nodes=nodes;
-        this.Edges=edges;
+    private HashMap<Vector, EdgeData> Edges;
+    private HashMap<Integer, NodeData> Nodes;
+
+    private Iterator itOfNodes;
+    private int itOfNodesCreated;
+    private Iterator itOfEdges;
+    private int itOfEdgesCreated;
+    private int changes;
+
+
+    public MyDirectedWeightedGraph(HashMap Nodes, HashMap Edges){
+        this.Nodes = Nodes;
+        this.Edges = Edges;
         changes=0;
         createIteratorOfNodes();
         createIteratorOfEdges();
     }
 
+    //this method returns the reversed graph without considering the weight of edges
+    public MyDirectedWeightedGraph reversedGraph(){
+        HashMap<Vector,EdgeData> newEdges = new HashMap<>();
+        for (NodeData  a : Nodes.values()) {
+            for (NodeData  b : Nodes.values()) {
+                if (a!=b && getEdge(a.getKey(),b.getKey())==null) {
+                    EdgeData ed = new Edge(a.getKey(),0 ,b.getKey());
+                    Vector v = new Vector(2);
+                    v.add(ed.getSrc());
+                    v.add(ed.getDest());
+                    newEdges.put(v,ed);
+                }
+            }
+        }
+        MyDirectedWeightedGraph rg = new MyDirectedWeightedGraph(Nodes, newEdges);
+        return rg;
+    }
+
+    public HashMap<Integer, NodeData> getNodes() {
+        return Nodes;
+    }
+
+    public HashMap<Vector, EdgeData> getEdges() {
+        return Edges;
+    }
+
     public DirectedWeightedGraph copy(){
-        return new MyDirectedWeightedGraph(this.Nodes, this.Edges);
+        return new MyDirectedWeightedGraph(Nodes, Edges);
     }
 
     private void createIteratorOfNodes(){
@@ -60,7 +89,7 @@ public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
             v.add(src);
             v.add(dest);
 
-            EdgeData e = new Edge(src,dest,0,w,null);
+            EdgeData e = new Edge(src,w,dest);
 
             Node srcNode =(Node) Nodes.get(src);
             Node destNode =(Node) Nodes.get(dest);
@@ -111,7 +140,7 @@ public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
 
     @Override
     public NodeData removeNode(int key) {
-        NodeData nData =Nodes.get(key);
+        NodeData nData = Nodes.get(key);
         Node n = (Node) nData;
         while (n.degree()>0){
             removeEdge(n.getEdges(0).getSrc(),n.getEdges(0).getDest());
