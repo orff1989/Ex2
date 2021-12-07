@@ -34,17 +34,40 @@ class MyDirectedWeightedGraphAlgorithmsTest {
 //    void copy() {
 //    }
 //
-//    @Test
-//    void isConnected() {
-//    }
-//
-//    @Test
-//    void shortestPathDist() {
-//    }
-//
-//    @Test
-//    void shortestPath() {
-//    }
+    @Test
+    void isConnected() {
+        MyDirectedWeightedGraphAlgorithms g1 = new MyDirectedWeightedGraphAlgorithms();
+        boolean r1 =g1.load("data/G1.json");
+
+        MyDirectedWeightedGraphAlgorithms g2 = new MyDirectedWeightedGraphAlgorithms();
+        boolean r2 =g2.load("data/G2.json");
+
+        MyDirectedWeightedGraphAlgorithms gg1 = new MyDirectedWeightedGraphAlgorithms();
+        boolean r3 =gg1.load("data/GG1.json");
+
+        assertTrue(g1.isConnected());
+        assertTrue(g2.isConnected());
+        assertFalse(gg1.isConnected());
+    }
+
+    @Test
+    void shortestPathDist() {
+        MyDirectedWeightedGraphAlgorithms g = new MyDirectedWeightedGraphAlgorithms();
+        boolean r =g.load("data/G1.json");
+
+        assertEquals(4.096793421922225, g.shortestPathDist(0,3));
+        assertEquals(3.031440459773105, g.shortestPathDist(2,7));
+        assertEquals(8.665140841052668, g.shortestPathDist(15,4));
+    }
+
+    @Test
+    void shortestPath() {
+        MyDirectedWeightedGraphAlgorithms g = new MyDirectedWeightedGraphAlgorithms();
+        boolean r =g.load("data/Gsmal1.json");
+        System.out.println(g.shortestPathDist(0,2));
+        g.shortestPath(0,2);
+
+    }
 //
 //    @Test
 //    void center() {

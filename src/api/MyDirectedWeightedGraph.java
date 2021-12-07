@@ -93,8 +93,7 @@ public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
 
             Node srcNode =(Node) Nodes.get(src);
             Node destNode =(Node) Nodes.get(dest);
-            srcNode.addEdge(e);
-            destNode.addEdge(e);
+
             changes++;
             Edges.put(v,e);
         }
@@ -141,9 +140,11 @@ public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
     @Override
     public NodeData removeNode(int key) {
         NodeData nData = Nodes.get(key);
-        Node n = (Node) nData;
-        while (n.degree()>0){
-            removeEdge(n.getEdges(0).getSrc(),n.getEdges(0).getDest());
+        graphHelper gh = new graphHelper(this);
+
+        for (Edge ed : gh.Edges){
+            if (ed.getSrc()==key || ed.getDest()==key)
+                removeEdge(ed.getSrc(),ed.getDest());
         }
         Nodes.remove(key);
         changes++;
@@ -156,10 +157,7 @@ public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
         vec.add(src);
         vec.add(dest);
         EdgeData ed = Edges.get(vec);
-        Node srcNode= (Node) Nodes.get(src);
-        Node destNode= (Node) Nodes.get(dest);
-        srcNode.removeEdge(ed);
-        destNode.removeEdge(ed);
+
         Edges.remove(vec);
         changes++;
         return ed;

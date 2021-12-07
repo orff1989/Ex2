@@ -11,21 +11,30 @@ public class Node implements NodeData {
     private transient int tag;
     private transient double weight;
     private transient String info;
-    private transient LinkedList<EdgeData> nodeEdges = new LinkedList<>();
+    transient LinkedList<EdgeData> neighbors;
 
     public Node(String pos, int id){
         this.pos =new String(pos) ;
         this.id = id;
-
         String[] loc= pos.split(",");
         double xx =  Double.parseDouble(loc[0]);
         double yy =  Double.parseDouble(loc[1]);
         double zz =  Double.parseDouble(loc[2]);
-
         this.location= new Location(xx,yy,zz);
-
+        this.neighbors = new LinkedList<>();
     }
 
+    public LinkedList<EdgeData> getNeighbors() {
+        return neighbors;
+    }
+
+    public void addNeighbor(EdgeData ed){
+        neighbors.add(ed);
+    }
+
+    public void removeNeighbor(EdgeData ed){
+        neighbors.remove(ed);
+    }
     @Override
     public String toString() {
         return "pos=" + pos + ", id=" + id;
@@ -34,18 +43,6 @@ public class Node implements NodeData {
     public String getPos() {
         return pos;
     }
-
-    public EdgeData getEdges(int i) {
-        return nodeEdges.get(i);
-    }
-
-    public void addEdge(EdgeData ed) {
-        nodeEdges.addFirst(ed);
-    }
-
-    public int degree(){ return nodeEdges.size(); }
-
-    public void removeEdge(EdgeData ed){ nodeEdges.remove(ed); }
 
     @Override
     public int getKey() {

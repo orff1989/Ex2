@@ -28,41 +28,116 @@ public class MyDirectedWeightedGraphAlgorithms implements DirectedWeightedGraphA
 
     @Override
     public boolean isConnected() {
-        MyDirectedWeightedGraph g= (MyDirectedWeightedGraph) this.graph;
-        if (g.getNodes().isEmpty()==false){
-        Node myNode= (Node) g.getNode(0);
-
-        MyDirectedWeightedGraph graph=g;
-        MyDirectedWeightedGraph reversedg = g.reversedGraph();
-        boolean b1=false;
-        boolean b2=false;
-        for (NodeData n : g.getNodes().values()) {
-            if (myNode != n && shortestPathDist(myNode.getKey(),n.getKey()) !=-1) {
-                b1=true;
-            }
-            init(reversedg);
-            if (myNode != n && shortestPathDist(myNode.getKey(),n.getKey()) !=-1){
-                b2=true;
-            }
-            init(graph);
-            if (b1 || b2) return false;
-        }
+        boolean[] visi = new boolean[graph.nodeSize()];
+        dfs(0,visi);
+        int c = 0;
+        for (int i = 0; i <graph.nodeSize() ; i++) {
+            if(visi[i]==false) return false;
         }
         return true;
     }
 
+    private void dfs(int NodeId,boolean[] visi) {
+        MyDirectedWeightedGraph gg = (MyDirectedWeightedGraph) graph;
+        visi[NodeId]=true;
+
+        for (Object o: gg.getEdges().values()) {
+        EdgeData ed = (Edge) o;
+        if (gg.getEdge(NodeId, ed.getDest())!=null){
+            if (visi[ed.getDest()]==false) dfs(ed.getDest(),visi);
+        }
+        }
+    }
+    //this method is adding every node its edges
+    private void fixNodesNeighbors(){
+        MyDirectedWeightedGraph gg = (MyDirectedWeightedGraph) graph;
+
+        for (Object o1 : gg.getNodes().values()){
+            Node n = (Node) o1;
+            n.neighbors = new LinkedList<EdgeData>();
+        }
+
+        for (Object o : gg.getEdges().values()){
+            EdgeData ed = (Edge) o;
+            Node srcNode = (Node) gg.getNode(ed.getSrc());
+            srcNode.addNeighbor(ed);
+        }
+    }
+    private double[] dijkDist(int src, LinkedList<NodeData>[] thePath){
+        MyDirectedWeightedGraph gg = (MyDirectedWeightedGraph) graph;
+        double[] distance = new double[graph.nodeSize()];
+        boolean[] visi = new boolean[graph.nodeSize()];
+        Set<Integer> mySet = new HashSet<>();
+
+        for(int k = 0; k <graph.nodeSize(); k++)
+        {
+            visi[k] = false;
+            distance[k] = 999999;
+        }
+        distance[src]=0;
+        int thisNode=src;
+
+        while (1==1){
+            visi[thisNode]=true;
+            Node n = (Node) gg.getNode(thisNode);
+
+            for (EdgeData ed : n.getNeighbors()) {
+                if(visi[ed.getDest()]) continue;;
+
+                mySet.add(ed.getDest());
+                double tempLenghth = distance[thisNode]+ ed.getWeight();
+                if (tempLenghth<distance[ed.getDest()]){
+                    distance[ed.getDest()]=tempLenghth;
+                    thePath[ed.getDest()]= new LinkedList<>();
+                    thePath[ed.getDest()]= (LinkedList<NodeData>) thePath[thisNode].clone();
+                    thePath[ed.getDest()].addLast(gg.getNode(thisNode));
+                }
+            }
+            mySet.remove(thisNode);
+            if (mySet.size()==0) break;
+
+            double minimumDistance=999999;
+            int j=0;
+            for (int i :mySet){
+                if (minimumDistance>distance[i]){
+                    minimumDistance=distance[i];
+                    j=i;
+                }
+            }
+            thisNode=j;
+        }
+        return distance;
+    }
     @Override
     public double shortestPathDist(int src, int dest) {
-        return 0;
+        fixNodesNeighbors();
+        LinkedList<NodeData>[] thePath = new LinkedList[graph.nodeSize()];
+        for (int i = 0; i < thePath.length; i++) {
+            thePath[i]= new LinkedList<>();
+        }
+        double[] distance = dijkDist(src,thePath);
+        return distance[dest];
     }
 
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
-        return null;
+        fixNodesNeighbors();
+        LinkedList<NodeData>[] thePath = new LinkedList[graph.nodeSize()];
+        for (int i = 0; i < thePath.length; i++) {
+            thePath[i]= new LinkedList<>();
+        }
+        double[] distance = dijkDist(src,thePath);
+        thePath[dest].add(graph.getNode(dest));
+        List<NodeData> ans = thePath[dest];
+        return ans;
     }
 
     @Override
     public NodeData center() {
+        if (isConnected()){
+
+
+        }
         return null;
     }
 
