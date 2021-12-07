@@ -125,15 +125,13 @@ public class MyDirectedWeightedGraph implements DirectedWeightedGraph {
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        Iterator<EdgeData> it = edgeIter();
-        if (it==null) return null;
+        LinkedList<EdgeData> finalCollection = new LinkedList<>();
 
-        Collection finalCollection = null;
-
-        while (it.hasNext()){
-           EdgeData ed=it.next();
-            if (ed.getSrc()==node_id) finalCollection.add(ed);
+       for(Object o : finalCollection){
+           EdgeData ed=(Edge) o;
+           if (ed.getSrc()==node_id) finalCollection.add(ed);
         }
+       System.out.println(finalCollection.size());
         return finalCollection.iterator();
     }
 

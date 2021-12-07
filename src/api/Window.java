@@ -12,7 +12,7 @@ public class Window implements ActionListener {
     JMenuItem load, save;
     JMenuItem addNode, connectNodes,removeNode,removeEdge;
     JMenuItem isConnect, shortestPathDist,center,tsp;
-    JTextField loadTextField, saveTextField, addNodeTextField, connectNodesTextField, removeNodeTextField,removeEdgeTextField,isConnectTextField;
+    JTextField loadTextField, saveTextField, addNodeTextField, connectNodesTextField, removeNodeTextField,removeEdgeTextField,shortestPathDistTextField;
     DirectedWeightedGraphAlgorithms dwga;
     Container c = new Container();
     int counterOfSaves;
@@ -211,6 +211,30 @@ public class Window implements ActionListener {
             else JOptionPane.showMessageDialog(mainFrame, "The Graph Is Not Connected");
             System.out.println("is Connected: " +connected);
 
+        }
+
+        if(e.getSource()==shortestPathDist) {
+            subFrame =getNewFrame();
+
+            shortestPathDistTextField = getNewTextField();
+            shortestPathDistTextField.addActionListener(this);
+            subFrame.add(shortestPathDistTextField);
+
+            JLabel fileName = new JLabel("Enter: srcId, destId");
+            subFrame.add(fileName);
+
+            fileName.setVisible(true);
+            shortestPathDistTextField.setVisible(true);
+            subFrame.setVisible(true);
+        }
+        if (e.getSource()==shortestPathDistTextField){
+            String[] arrOfStr = shortestPathDistTextField.getText().split(",");
+
+            double a = dwga.shortestPathDist(Integer.parseInt(arrOfStr[0]),Integer.parseInt(arrOfStr[1]));
+            if (a==-1) JOptionPane.showMessageDialog(mainFrame, "There is no path.");
+            else JOptionPane.showMessageDialog(mainFrame, "The shortest Path Distance is: "+ a);
+            System.out.println("The shortest Path Distance is: "+ a);
+            subFrame.setVisible(false);
         }
     }
 

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 public class Node implements NodeData {
 
-
     private String pos;
     private transient GeoLocation location;
     private int id;

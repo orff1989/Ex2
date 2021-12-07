@@ -25,15 +25,21 @@ class MyDirectedWeightedGraphAlgorithmsTest {
         DirectedWeightedGraph g = new MyDirectedWeightedGraph(hm, new HashMap<Vector,EdgeData>());
         DirectedWeightedGraphAlgorithms gh = new MyDirectedWeightedGraphAlgorithms();
         gh.init(g);
-        System.out.println(g.getNode(0).toString());
         assertEquals(g.getNode(0).toString(),"pos=5,5,5, id=0");
     }
 
-//
-//    @Test
-//    void copy() {
-//    }
-//
+
+    @Test
+    void copy() {
+        MyDirectedWeightedGraphAlgorithms g1 = new MyDirectedWeightedGraphAlgorithms();
+        boolean r1 =g1.load("data/G1.json");
+        DirectedWeightedGraph graph= g1.copy();
+
+        assertEquals(g1.getGraph().getNode(0).toString(),graph.getNode(0).toString());
+        assertEquals(g1.getGraph().getNode(5).toString(),graph.getNode(5).toString());
+        assertEquals(g1.getGraph().getNode(10).toString(),graph.getNode(10).toString());
+    }
+
     @Test
     void isConnected() {
         MyDirectedWeightedGraphAlgorithms g1 = new MyDirectedWeightedGraphAlgorithms();
@@ -63,10 +69,11 @@ class MyDirectedWeightedGraphAlgorithmsTest {
     @Test
     void shortestPath() {
         MyDirectedWeightedGraphAlgorithms g = new MyDirectedWeightedGraphAlgorithms();
-        boolean r =g.load("data/Gsmal1.json");
-        System.out.println(g.shortestPathDist(0,2));
-        g.shortestPath(0,2);
+        boolean r =g.load("data/G3.json");
 
+        assertEquals(g.shortestPath(5,13).toString(), "[pos=35.20754740435835,32.10254648739496,0.0, id=5, pos=35.209415362389024,32.10265552605042,0.0, id=13]");
+        assertEquals(g.shortestPath(14,2).toString(), "[pos=35.203259591606134,32.1031462,0.0, id=14, pos=35.209415362389024,32.10265552605042,0.0, id=13, pos=35.211092279257464,32.10265552605042,0.0, id=3, pos=35.21313005165456,32.1046000487395,0.0, id=2]");
+        assertEquals(g.shortestPath(3,7).toString(), "[pos=35.211092279257464,32.10265552605042,0.0, id=3, pos=35.209415362389024,32.10265552605042,0.0, id=13, pos=35.20964885714286,32.104091201680674,0.0, id=11, pos=35.20945781598063,32.105781300840334,0.0, id=7]");
     }
 //
 //    @Test
@@ -105,7 +112,7 @@ class MyDirectedWeightedGraphAlgorithmsTest {
     void load() {
         MyDirectedWeightedGraphAlgorithms g = new MyDirectedWeightedGraphAlgorithms();
         boolean r =g.load("data/G1.json");
-        MyDirectedWeightedGraph gg = (MyDirectedWeightedGraph) g.graph;
+        MyDirectedWeightedGraph gg = (MyDirectedWeightedGraph) g.getGraph();
 
         assertEquals(gg.getNodes().get(0).toString(),"pos=35.19589389346247,32.10152879327731,0.0, id=0");
         assertEquals(gg.getNodes().get(5).toString(),"pos=35.212111165456015,32.106235628571426,0.0, id=5");
